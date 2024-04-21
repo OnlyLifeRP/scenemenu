@@ -8,12 +8,12 @@ version '3.1.1'
 lua54 'yes'
 shared_scripts {
     '@ox_lib/init.lua',
-    '@es_extended/imports.lua'
+    '@es_extended/imports.lua',
+    'config.lua'
 } 
 
 client_scripts {
     'warmenu.lua',
-    'config.lua',
     'client.lua'
 }
 

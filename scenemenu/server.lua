@@ -11,8 +11,6 @@ AddEventHandler('Disable', function(blip)
     TriggerClientEvent('RemoveBlip', -1)
 end)
 
-
-
 RegisterCommand(Config.ActivationCommand, function(source, args, rawCommand)
     xPlayer = ESX.GetPlayerFromId(source)
     local canUse = false
