@@ -190,3 +190,40 @@ RegisterNetEvent('scenemenu:openMenu')
 AddEventHandler('scenemenu:openMenu', function()
   WarMenu.OpenMenu('mainmenu')
 end)
+
+
+local radiusIndex = 1
+local speedIndex = 1
+lib.registerMenu({
+  id = 'scenemenu_menu',
+  title = 'scenemenu',
+  position = 'top-left',
+  onSideScroll = function(selected, scrollIndex, args)
+    if selected == 1 then
+      radiusIndex = scrollIndex
+      lib.setMenuOptions('scenemenu_menu', {label = 'Radius', values = Config.SpeedZone.Radius, description = 'Taille de la zone', icon = {'far', 'circle'}, defaultIndex = radiusIndex}, selected)
+    elseif selected == 2 then
+      speedIndex = scrollIndex
+      lib.setMenuOptions('scenemenu_menu', {label = 'Speed', values = Config.SpeedZone.Speed, description = 'Vitesse dans la zone', icon = {'fas', 'tachometer-alt'}, defaultIndex = speedIndex}, selected)
+    end
+  end,
+
+  options = {
+    {label = 'Radius', values = Config.SpeedZone.Radius, description = 'Taille de la zone', icon = {'far', 'circle'}, defaultIndex = radiusIndex},
+    {label = 'Speed', values = Config.SpeedZone.Speed, description = 'Vitesse dans la zone', icon = {'fas', 'tachometer-alt'}, defaultIndex = speedIndex},
+    {label = 'Create SpeedZone', icon = {'far', 'square-check'}},
+    {label = 'Delete SpeedZone', icon = {'far', 'circle-xmark'}},
+  }
+}, function(selected, scrollIndex, args)
+  if selected == 4 then
+    print('delet')
+    --removeSpeedZone()
+  else
+    print('create')
+    --createSpeedZone()
+  end
+end)
+
+RegisterCommand('testmenu', function()
+  lib.showMenu('scenemenu_menu')
+end, false)
