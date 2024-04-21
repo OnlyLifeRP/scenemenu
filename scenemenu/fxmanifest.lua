@@ -1,10 +1,15 @@
--- Resource Metadata
 fx_version 'cerulean'
 games { 'gta5' }
 
-author 'KJ Studios'
-description 'Classic Scene Menu Script for traffic management.'
-version '3.1.0'
+author 'Thomthom160'
+description 'Classic Scene Menu Script for traffic management. For ESX'
+version '3.1.1'
+
+lua54 'yes'
+shared_scripts {
+    '@ox_lib/init.lua',
+    '@es_extended/imports.lua'
+} 
 
 client_scripts {
     'warmenu.lua',
@@ -12,7 +17,4 @@ client_scripts {
     'client.lua'
 }
 
-server_scripts {
-    'server.lua',
-    'versioncheck.lua'
-}
+server_script 'server.lua'
