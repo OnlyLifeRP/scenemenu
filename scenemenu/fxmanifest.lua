@@ -13,7 +13,6 @@ shared_scripts {
 } 
 
 client_scripts {
-    'warmenu.lua',
     'client.lua'
 }
 

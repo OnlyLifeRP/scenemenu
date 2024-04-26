@@ -1,24 +1,50 @@
-RegisterServerEvent('ZoneActivated')
-AddEventHandler('ZoneActivated', function(message, speed, radius, x, y, z)
+local speedZones = {}
+
+RegisterServerEvent('scenemenu:server:createZone')
+AddEventHandler('scenemenu:server:createZone', function(message, speed, radius, coords)
     if message and Config.TrafficAlert then
         TriggerClientEvent('chat:addMessage', -1, { color = { 255, 255, 255 }, multiline = false, args = {"Scene Menu", message} })
     end
-    TriggerClientEvent('Zone', -1, speed, radius, x, y, z)
+    table.insert(speedZones, {coords = coords, speed = speed, radius = radius})
+    TriggerClientEvent('scenemenu:client:createZone', -1, speed, radius, coords)
 end)
 
-RegisterServerEvent('Disable')
-AddEventHandler('Disable', function(blip)
-    TriggerClientEvent('RemoveBlip', -1)
+RegisterServerEvent('scenemenu:server:removeZone')
+AddEventHandler('scenemenu:server:removeZone', function()
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local plyCoords = xPlayer.getCoords(true)
+    for k,v in pairs(speedZones) do
+        if (v.coords - plyCoords) < v.radius then
+            TriggerClientEvent('scenemenu:client:removeZone', -1, v.coords)
+            speedZones[k] = nil
+            xPlayer.showNotification('Zone désactivée')
+            break
+        end
+    end
+end)
+
+lib.callback.register('scenemenu:server:getZones', function(source)
+    return speedZones
 end)
 
 RegisterCommand(Config.ActivationCommand, function(source, args, rawCommand)
-    xPlayer = ESX.GetPlayerFromId(source)
+    local xPlayer = ESX.GetPlayerFromId(source)
     local canUse = false
     if xPlayer.group == 'god' or xPlayer.group == 'admin' or xPlayer.group == 'smod' then 
         canUse = true
     end
-    if lib.table.contains(Config.autorizedJobs, xPlayer.job.name) or lib.table.contains(Config.autorizedJobs, xPlayer.job2.name)  then
-        canUse = true
+    for k, v in pairs(Config.autorizedJobs) do
+        if k == xPlayer.job.name then
+            canUse = (xPlayer.job.grade >= v)
+            break
+        elseif k == xPlayer.job2.name then
+            canUse = (xPlayer.job2.grade >= v)
+            break
+        end
     end
-    if canUse then xPlayer.triggerEvent('scenemenu:openMenu') end
+    if canUse then 
+        xPlayer.triggerEvent('scenemenu:openMenu') 
+    else
+        xPlayer.showNotification('Tu ne peux pas faire ça')
+    end
 end, false)
