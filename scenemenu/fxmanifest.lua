@@ -17,3 +17,9 @@ client_scripts {
 }
 
 server_script 'server.lua'
+
+ox_libs {
+    'interface',
+    'callback',
+    'table'
+}
